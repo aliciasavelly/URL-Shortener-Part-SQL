@@ -17,12 +17,10 @@ class ShortenedUrl < ActiveRecord::Base
 
 
   def self.random_code
-    url = ""
-    while true
+    loop do
       url = "www.uniq.com/" + SecureRandom.urlsafe_base64
-      break unless ShortenedUrl.exists?(url)
+      return url unless ShortenedUrl.exists?(short_url: url)
     end
-    url
   end
 
   def self.create_short_url(long_url, user_id)
@@ -35,16 +33,7 @@ class ShortenedUrl < ActiveRecord::Base
   end
 
   def num_uniques
-    data = URLShortner_development.instance.execute(<<-SQL, id: id)
-      SELECT
-        COUNT(DISTINCT visits.user_id)
-      FROM
-        visits
-      WHERE
-        visits.short_url_id = :id
-    SQL
-
-    data
+    visits.select("user_id").distinct.count
   end
 
   def num_recent_uniques
