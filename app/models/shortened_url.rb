@@ -11,8 +11,9 @@
 #
 
 class ShortenedUrl < ActiveRecord::Base
-  validates :long_url, :user_id, presence: true
-  validates :short_url, presence: true, uniqueness: true
+  validates :long_url, , :short_url, :user_id, presence: true
+  validates :short_url, uniqueness: true
+  ### TO DO
 
 
   def self.random_code
@@ -59,11 +60,11 @@ class ShortenedUrl < ActiveRecord::Base
     primary_key: :id,
     foreign_key: :short_url_id,
     class_name: :Visit
+    ### dependent: :destroy ???
 
-  has_many :users,
+  has_many :visitors,
     Proc.new {distinct},
     through: :visits,
     source: :user
-
 
 end
