@@ -33,11 +33,16 @@ class ShortenedUrl < ActiveRecord::Base
   end
 
   def num_uniques
-    visits.select("user_id").distinct.count
+    visits.select('user_id').distinct.count
   end
 
   def num_recent_uniques
-
+    visits
+      .select('user_id')
+      ## TO DO why greater than instead of less than?
+      .where('created_at > ?', 10.minutes.ago)
+      .distinct
+      .count
   end
 
   belongs_to :creator,
