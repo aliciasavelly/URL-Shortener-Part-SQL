@@ -15,7 +15,6 @@ class ShortenedUrl < ActiveRecord::Base
   validates :short_url, uniqueness: true
   ### TO DO
 
-
   def self.random_code
     loop do
       url = "www.uniq.com/" + SecureRandom.urlsafe_base64
